@@ -51,7 +51,7 @@ export default class Preloader extends EventEmitter {
 
         let loader = this.loaders.get( opts.loader || this.getLoader( opts.url ) )
 
-        console.log( loader.name )
+        console.log( loader )
 
     }
 
@@ -73,7 +73,7 @@ export default class Preloader extends EventEmitter {
 
         while( loader = it.next().value ) {
             if ( loader.match.test( url ) ) {
-                return loader
+                return loader.name
             }
         }
 
