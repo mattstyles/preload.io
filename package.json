@@ -15,7 +15,8 @@
   "repository": "git://github.com/mattstyles/preloadio.git",
   "license": "ISC",
   "dependencies": {
-    "eventemitter3": "^1.1.1"
+    "eventemitter3": "^1.1.1",
+    "uuid": "^2.0.1"
   },
   "devDependencies": {
     "babel": "5.8.23",

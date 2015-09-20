@@ -1,5 +1,6 @@
 
 import EventEmitter from 'eventemitter3'
+import uuid from 'uuid'
 
 /**
  * Preloader base instance
@@ -13,7 +14,7 @@ export default class Preloader extends EventEmitter {
     constructor( opts ) {
         super()
 
-        this.queue = new Map()
+        this.queue = new Set()
         this.loaders = new Map()
     }
 
@@ -36,10 +37,13 @@ export default class Preloader extends EventEmitter {
             throw new Error( 'load requires an end point' )
         }
 
+        let id = uuid.v1()
+
         let opts = {
             url: url,
             silent: false,
-            loader: null
+            loader: null,
+            id: id
         }
         if ( typeof url === 'object' ) {
             if ( !url.url ) {
@@ -51,8 +55,13 @@ export default class Preloader extends EventEmitter {
 
         let loader = this.loaders.get( opts.loader || this.getLoader( opts.url ) )
 
-        console.log( loader )
+        this.queue.add( function() {
+            loader.load( opts.url )
+        })
 
+        this.run()
+
+        return id
     }
 
     /**
@@ -62,6 +71,23 @@ export default class Preloader extends EventEmitter {
      */
     flush() {
 
+    }
+
+    /**
+     * Processes the load queue
+     */
+    run = () => {
+
+
+        process.nextTick( () => {
+            this.queue.forEach( value => {
+                console.log( value )
+            })
+
+            console.log( this.queue )
+
+            return function() {}
+        })
     }
 
     /**

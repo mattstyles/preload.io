@@ -4,7 +4,10 @@ import Preloader from '../lib'
 
 let fakeLoader = {
     name: 'fake',
-    match: /jpg$/
+    match: /jpg$/,
+    load: () => {
+        return this
+    }
 }
 
 let preloader = new Preloader()
