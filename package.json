@@ -1,6 +1,6 @@
 {
-  "name": "preloadio",
-  "version": "0.0.0",
+  "name": "preload.io",
+  "version": "0.0.1",
   "description": "Asset preloader",
   "main": "lib/index.js",
   "scripts": {
