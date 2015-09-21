@@ -5,8 +5,8 @@ import Preloader from '../lib'
 let fakeLoader = {
     name: 'fake',
     match: /jpg$/,
-    load: () => {
-        return this
+    load: ( ctx, opts ) => {
+        console.log( 'fakeLoader', this, opts )
     }
 }
 

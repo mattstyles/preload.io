@@ -16,6 +16,8 @@ export default class Preloader extends EventEmitter {
 
         this.queue = new Set()
         this.loaders = new Map()
+
+        this.isRunning = false
     }
 
     /**
@@ -26,25 +28,31 @@ export default class Preloader extends EventEmitter {
     }
 
     /**
-     * Adds a url to the queue to be loaded
+     * Routes load requests through the relevant loader instance
      * @param url <String || Object> end point to load or options hash
      *   @param url <String> end point
      *   @param silent <Boolean> if true then no events are emitted for this resource
+     *   @param wait <Boolean> wont automatically call run, although other loads might
      *   @param loader <String> named loader to use to load the resource
+     *   @param id <String> custom id to use for load event
      */
     load( url ) {
         if ( !url ) {
             throw new Error( 'load requires an end point' )
         }
 
-        let id = uuid.v1()
+        if ( !this.loaders.size ) {
+            throw new Error( 'no loaders associated with preload.io' )
+        }
 
         let opts = {
             url: url,
             silent: false,
+            wait: false,
             loader: null,
-            id: id
+            id: null
         }
+
         if ( typeof url === 'object' ) {
             if ( !url.url ) {
                 throw new Error( 'load requires an end point' )
@@ -53,13 +61,22 @@ export default class Preloader extends EventEmitter {
             opts = Object.assign( opts, url )
         }
 
-        let loader = this.loaders.get( opts.loader || this.getLoader( opts.url ) )
+        let id = opts.id || uuid.v1()
+        let loader = this.loaders.get( opts.loader || this.getLoaderName( opts.url ) )
 
-        this.queue.add( function() {
-            loader.load( opts.url )
+        let loadOpts = Object.assign( opts, {
+            id: id,
+            loader: loader
         })
 
-        this.run()
+        // Adds the loader function to the queue
+        this.queue.add( () => {
+            loader.load( this, loadOpts )
+        })
+
+        if ( !opts.wait ) {
+            this.run()
+        }
 
         return id
     }
@@ -67,33 +84,33 @@ export default class Preloader extends EventEmitter {
     /**
      * Flushes the queue and any state, useful for implementing load stages
      * i.e. call load a bunch of times for stage 1, hit up flush onComplete
-     * and call load a bunch more times for the next loading stage
+     * and call load a bunch more times for the next loading stage.
      */
     flush() {
-
+        
     }
 
     /**
      * Processes the load queue
      */
     run = () => {
+        if ( this.isRunning ) {
+            return
+        }
 
+        this.isRunning = true
 
         process.nextTick( () => {
-            this.queue.forEach( value => {
-                console.log( value )
-            })
+            this.queue.forEach( fn => fn())
 
             console.log( this.queue )
-
-            return function() {}
         })
     }
 
     /**
      * Tries to match filename extension with the loader required to load it
      */
-    getLoader( url ) {
+    getLoaderName( url ) {
         let it = this.loaders.values()
         let loader = null
 
