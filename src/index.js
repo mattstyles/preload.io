@@ -7,6 +7,9 @@ import uuid from 'uuid'
  */
 export const EVENTS = {
     LOAD: 'load',
+    LOAD_ERROR: 'load:error',
+
+    START: 'preload:start',
     COMPLETE: 'preload:complete',
     FLUSH: 'preload:flush'
 }
@@ -26,6 +29,7 @@ export default class Preloader extends EventEmitter {
 
         this.queue = new Set()
         this.loaders = new Map()
+        this.responses = new Set()
 
         this.isRunning = false
     }
@@ -74,15 +78,13 @@ export default class Preloader extends EventEmitter {
         let id = opts.id || uuid.v1()
         let loader = this.loaders.get( opts.loader || this.getLoaderName( opts.url ) )
 
-        let loadOpts = Object.assign( opts, {
+        let loadEvent = Object.assign( opts, {
             id: id,
             loader: loader
         })
 
         // Adds the loader function to the queue
-        this.queue.add( () => {
-            loader.load( this, loadOpts )
-        })
+        this.queue.add( loadEvent )
 
         if ( !opts.wait ) {
             this.run()
@@ -100,10 +102,12 @@ export default class Preloader extends EventEmitter {
      */
     flush() {
         this.queue.clear()
+        this.responses.clear()
+        this.emit( EVENTS.FLUSH )
     }
 
     /**
-     * Processes the load queue
+     * Processes the load queue.
      */
     run = () => {
         if ( this.isRunning ) {
@@ -112,10 +116,23 @@ export default class Preloader extends EventEmitter {
 
         this.isRunning = true
 
-        process.nextTick( () => {
-            this.queue.forEach( fn => fn())
+        // Set up load event listeners
+        this.on( EVENTS.LOAD, this.onLoad )
 
-            console.log( this.queue )
+        process.nextTick( () => {
+            this.emit( EVENTS.START )
+            this.queue.forEach( event => event.loader.load( this, event ) )
+        })
+
+        /**
+         * Return a promise to allow thenable or async/await
+         */
+        return new Promise( ( resolve, reject ) => {
+            // Resolved with all the responses
+            this.once( EVENTS.COMPLETE, res => {
+                // @TODO check for response errors and reject
+                resolve( res )
+            })
         })
     }
 
@@ -133,5 +150,29 @@ export default class Preloader extends EventEmitter {
         }
 
         return null
+    }
+
+    /**
+     * Collects up load events
+     */
+    onLoad = ( event ) => {
+        this.responses.add( event )
+
+        if ( event.status && event.status !== 200 ) {
+            this.emit( EVENTS.LOAD_ERROR, event )
+        }
+
+        if ( this.responses.size >= this.queue.size ) {
+            // Delay to make sure all load events have been collected by listeners
+            process.nextTick( this.onComplete )
+        }
+    }
+
+    /**
+     * Fired when all load events are finished, regardless of whether they failed
+     */
+    onComplete = ( res ) => {
+        this.off( EVENTS.LOAD, this.onLoad )
+        this.emit( EVENTS.COMPLETE, this.responses )
     }
 }
