@@ -50,7 +50,7 @@ export default class Preloader extends EventEmitter {
      *   @param loader <String> named loader to use to load the resource
      *   @param id <String> custom id to use for load event
      */
-    load( url ) {
+    load = ( url ) => {
         if ( !url ) {
             throw new Error( 'load requires an end point' )
         }
@@ -118,6 +118,7 @@ export default class Preloader extends EventEmitter {
 
         // Set up load event listeners
         this.on( EVENTS.LOAD, this.onLoad )
+        this.on( EVENTS.LOAD_ERROR, this.onLoad )
 
         process.nextTick( () => {
             this.emit( EVENTS.START )
@@ -158,10 +159,6 @@ export default class Preloader extends EventEmitter {
     onLoad = ( event ) => {
         this.responses.add( event )
 
-        if ( event.status && event.status !== 200 ) {
-            this.emit( EVENTS.LOAD_ERROR, event )
-        }
-
         if ( this.responses.size >= this.queue.size ) {
             // Delay to make sure all load events have been collected by listeners
             process.nextTick( this.onComplete )
@@ -173,6 +170,7 @@ export default class Preloader extends EventEmitter {
      */
     onComplete = ( res ) => {
         this.off( EVENTS.LOAD, this.onLoad )
+        this.off( EVENTS.LOAD_ERROR, this.onLoad )
         this.emit( EVENTS.COMPLETE, this.responses )
 
         this.running = false
