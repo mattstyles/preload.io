@@ -3,7 +3,7 @@ import EventEmitter from 'eventemitter3'
 import uuid from 'uuid'
 
 /**
- * Preloader base instance
+ * Preloader manager instance
  * Manages module loaders and emits events
  * @class
  */
@@ -85,9 +85,11 @@ export default class Preloader extends EventEmitter {
      * Flushes the queue and any state, useful for implementing load stages
      * i.e. call load a bunch of times for stage 1, hit up flush onComplete
      * and call load a bunch more times for the next loading stage.
+     * Flush will not cancel or clear any initiated load events, just clears
+     * the current queue.
      */
     flush() {
-        
+        this.queue.clear()
     }
 
     /**
