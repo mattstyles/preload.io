@@ -174,5 +174,7 @@ export default class Preloader extends EventEmitter {
     onComplete = ( res ) => {
         this.off( EVENTS.LOAD, this.onLoad )
         this.emit( EVENTS.COMPLETE, this.responses )
+
+        this.running = false
     }
 }

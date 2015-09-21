@@ -1,7 +1,7 @@
-# preloadio
+# preload.io
 
 > Asset preloader
 
 ```
-npm run build
+npm install --save preload.io
 ```
