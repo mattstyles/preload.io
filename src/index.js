@@ -3,6 +3,16 @@ import EventEmitter from 'eventemitter3'
 import uuid from 'uuid'
 
 /**
+ * Events hash
+ */
+export const EVENTS = {
+    LOAD: 'load',
+    COMPLETE: 'preload:complete',
+    FLUSH: 'preload:flush'
+}
+
+
+/**
  * Preloader manager instance
  * Manages module loaders and emits events
  * @class
