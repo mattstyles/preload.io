@@ -120,10 +120,10 @@ export default class Preloader extends EventEmitter {
         this.on( EVENTS.LOAD, this.onLoad )
         this.on( EVENTS.LOAD_ERROR, this.onLoad )
 
-        process.nextTick( () => {
+        setTimeout( () => {
             this.emit( EVENTS.START )
             this.queue.forEach( event => event.loader.load( this, event ) )
-        })
+        }, 0 )
 
         /**
          * Return a promise to allow thenable or async/await
@@ -161,7 +161,7 @@ export default class Preloader extends EventEmitter {
 
         if ( this.responses.size >= this.queue.size ) {
             // Delay to make sure all load events have been collected by listeners
-            process.nextTick( this.onComplete )
+            setTimeout( this.onComplete, 0 )
         }
     }
 
