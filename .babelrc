@@ -1,8 +1,7 @@
 {
   "stage": 2,
   "optional": [
-    "es7.classProperties",
-    "asyncToGenerator"
+    "es7.classProperties"
   ],
   "loose": [
     "es6.modules",

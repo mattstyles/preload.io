@@ -8,9 +8,9 @@
     "build": "babel src --out-dir lib",
     "watch": "babel src --out-dir lib --watch",
     "preexample": "npm run build",
-    "example": "browserify -t babelify examples/load.js > examples/build.js",
+    "example": "browserify examples/load.js > examples/build.js",
     "pretest": "npm run build",
-    "test": "zuul --local 8080 -- spec/*.js",
+    "test": "zuul --open --local 8080 -- spec/*.js",
     "prezuul": "npm run build",
     "zuul": "zuul -- spec/*.js"
   },
