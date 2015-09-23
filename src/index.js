@@ -173,6 +173,6 @@ export default class Preloader extends EventEmitter {
         this.off( EVENTS.LOAD_ERROR, this.onLoad )
         this.emit( EVENTS.COMPLETE, this.responses )
 
-        this.running = false
+        this.isRunning = false
     }
 }
