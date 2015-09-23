@@ -61,7 +61,6 @@ export default class Preloader extends EventEmitter {
 
         let opts = {
             url: url,
-            silent: false,
             wait: false,
             loader: null,
             id: null
@@ -77,6 +76,10 @@ export default class Preloader extends EventEmitter {
 
         let id = opts.id || uuid.v1()
         let loader = this.loaders.get( opts.loader || this.getLoaderName( opts.url ) )
+
+        if ( !loader ) {
+            throw new Error( 'No loader associated with resource ' + opts.url )
+        }
 
         let loadEvent = Object.assign( opts, {
             id: id,
