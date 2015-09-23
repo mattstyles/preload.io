@@ -29,7 +29,7 @@ export default class Preloader extends EventEmitter {
 
         this.queue = new Set()
         this.loaders = new Map()
-        this.responses = new Set()
+        this.responses = new Map()
 
         this.isRunning = false
     }
@@ -160,7 +160,7 @@ export default class Preloader extends EventEmitter {
      * Collects up load events
      */
     onLoad = ( event ) => {
-        this.responses.add( event )
+        this.responses.set( event.id, event )
 
         if ( this.responses.size >= this.queue.size ) {
             // Delay to make sure all load events have been collected by listeners

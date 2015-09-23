@@ -54,6 +54,18 @@ tape( 'Load event should contain an id returned by the load function', t => {
     })
 })
 
+tape( 'Load events can be gathered from the resultant response map on load complete', t => {
+    t.plan( 1 )
+
+    let preloader = new Preloader()
+    preloader.register( new MockLoader() )
+    let id = preloader.load( 'mock.jpg' )
+
+    preloader.on( EVENTS.COMPLETE, res => {
+        t.ok( res.get( id ), 'Found id in response map' )
+    })
+})
+
 tape( 'Waiting and manually calling run can be used async/await', async t => {
     t.plan( 3 )
 
@@ -90,10 +102,10 @@ tape( 'Multiple load events should all be triggered on the next tick to allow th
         .map( name => name + '.jpg' )
         .forEach( preloader.load )
 
-    t.notOk( isRunning )
+    t.notOk( isRunning, 'current tick: not yet runnning' )
 
     setTimeout( () => {
-        t.ok( isRunning )
+        t.ok( isRunning, 'next tick: is now running' )
     }, 1 )
 
     preloader.on( EVENTS.COMPLETE, responses => {
