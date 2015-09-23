@@ -15,3 +15,13 @@ tape( 'Registering a loader should add it to the loaders map', t => {
     t.equal( preloader.loaders.size, 1 )
     t.ok( preloader.loaders.has( 'mock' ), 'mock loader registered' )
 })
+
+tape( 'getLoaderName should find a loader based on a regex match', t => {
+    t.plan( 2 )
+
+    let preloader = new Preloader()
+    preloader.register( new MockLoader() )
+
+    t.equal( preloader.loaders.size, 1 )
+    t.equal( preloader.getLoaderName( 'mock.jpg' ), 'mock' )
+})

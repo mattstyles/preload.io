@@ -26,7 +26,7 @@ tape( 'Flushing should empty the queues', t => {
 })
 
 tape( 'Flushing onComplete should empty the response queue', t => {
-    t.plan( 2 )
+    t.plan( 5 )
 
     let preloader = new Preloader()
     preloader.register( new MockLoader() )
@@ -39,7 +39,7 @@ tape( 'Flushing onComplete should empty the response queue', t => {
     t.equal( preloader.responses.size, 0 )
 
     preloader.on( EVENTS.COMPLETE, responses => {
-        t.equal( responses.size )
+        t.equal( responses.size, 1 )
 
         preloader.flush()
 
