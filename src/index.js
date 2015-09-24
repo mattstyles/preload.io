@@ -43,15 +43,15 @@ export default class Preloader extends EventEmitter {
 
     /**
      * Routes load requests through the relevant loader instance
-     * @param url <String || Object> end point to load or options hash
-     *   @param url <String> end point
+     * @param resource <String || Object> end point to load or options hash
+     *   @param resource <String> end point
      *   @param silent <Boolean> if true then no events are emitted for this resource
      *   @param wait <Boolean> wont automatically call run, although other loads might
      *   @param loader <String> named loader to use to load the resource
      *   @param id <String> custom id to use for load event
      */
-    load = ( url ) => {
-        if ( !url ) {
+    load = ( resource ) => {
+        if ( !resource ) {
             throw new Error( 'load requires an end point' )
         }
 
@@ -60,25 +60,25 @@ export default class Preloader extends EventEmitter {
         }
 
         let opts = {
-            url: url,
+            resource: resource,
             wait: false,
             loader: null,
             id: null
         }
 
-        if ( typeof url === 'object' ) {
-            if ( !url.url ) {
+        if ( typeof resource === 'object' ) {
+            if ( !resource.resource ) {
                 throw new Error( 'load requires an end point' )
             }
 
-            opts = Object.assign( opts, url )
+            opts = Object.assign( opts, resource )
         }
 
         let id = opts.id || uuid.v1()
-        let loader = this.loaders.get( opts.loader || this.getLoaderName( opts.url ) )
+        let loader = this.loaders.get( opts.loader || this.getLoaderName( opts.resource ) )
 
         if ( !loader ) {
-            throw new Error( 'No loader associated with resource ' + opts.url )
+            throw new Error( 'No loader associated with resource ' + opts.resource )
         }
 
         let loadEvent = Object.assign( opts, {
@@ -143,12 +143,12 @@ export default class Preloader extends EventEmitter {
     /**
      * Tries to match filename extension with the loader required to load it
      */
-    getLoaderName( url ) {
+    getLoaderName( resource ) {
         let it = this.loaders.values()
         let loader = null
 
         while( loader = it.next().value ) {
-            if ( loader.match.test( url ) ) {
+            if ( loader.match.test( resource ) ) {
                 return loader.name
             }
         }

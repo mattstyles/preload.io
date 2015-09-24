@@ -12,7 +12,7 @@ tape( 'Flushing should empty the queues', t => {
     let preloader = new Preloader()
     preloader.register( new MockLoader() )
     preloader.load({
-        url: 'mock.jpg',
+        resource: 'mock.jpg',
         loader: 'mock',
         wait: true
     })
@@ -31,7 +31,7 @@ tape( 'Flushing onComplete should empty the response queue', t => {
     let preloader = new Preloader()
     preloader.register( new MockLoader() )
     preloader.load({
-        url: 'mock.jpg',
+        resource: 'mock.jpg',
         loader: 'mock'
     })
 

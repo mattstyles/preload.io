@@ -10,9 +10,7 @@ let wait = function( delay ) {
 class MockLoader {
     constructor() {
         this.name = 'mock'
-
         this.match = /jpg$/
-
     }
 
     load = async ( ctx, opts ) => {

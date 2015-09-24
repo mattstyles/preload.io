@@ -34,7 +34,7 @@ tape( 'Load can be called with an object', t => {
     let preloader = new Preloader()
     preloader.register( new MockLoader() )
     preloader.load({
-        url: 'mock.jpg'
+        resource: 'mock.jpg'
     })
 
     preloader.on( EVENTS.LOAD, event => {
@@ -72,7 +72,7 @@ tape( 'Waiting and manually calling run can be used async/await', async t => {
     let preloader = new Preloader()
     preloader.register( new MockLoader() )
     let id = preloader.load({
-        url: 'mock.jpg',
+        resource: 'mock.jpg',
         wait: true
     })
 
