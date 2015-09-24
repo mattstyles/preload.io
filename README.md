@@ -49,7 +49,7 @@ preloader.on( EVENTS.COMPLETE, res => {
 
 ```js
 preloader.load({
-    url: 'image.png',
+    resource: 'image.png',
     wait: true
 })
 
@@ -70,7 +70,7 @@ const imageloader = new ImageLoader()
 preloader.register( imageloader )
 
 preloader.load({
-    url: '/dailyImage',
+    resource: '/dailyImage',
     loader: imageloader.name
 })
 ```
