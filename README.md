@@ -84,12 +84,27 @@ const id = preloader.load( 'splash-image.jpg' )
 
 preloader.on( EVENTS.LOAD, event => {
     if ( event.id === id ) {
-        goUseThatSplashImage( 'splash-image.jpg' )
+        goUseThatSplashImage( event.res )
     }
 })
 ```
 
 The contents of the load event is determined by the module loader so check the documentation for each loader although by convention they should return an `id` to let you handle specific events.
+
+## Grabbing resource once loading has completed
+
+A handle to all the resources is returned as a map during the `complete` event. Load event id's form the keys with the response as the value.
+
+```js
+preloader.load({
+    id: 'splash',
+    resource: 'splash-image.jpg'
+})
+
+preloader.on( EVENTS.COMPLETE, resources => {
+    doSomeSplashing( resources.get( 'splash' ).res )
+})
+```
 
 ## Contributions
 
