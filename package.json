@@ -28,6 +28,8 @@
   },
   "devDependencies": {
     "babel-cli": "^6.2.0",
+    "babel-polyfill": "^6.2.0",
+    "babel-preset-urban": "^0.3.0",
     "babelify": "^7.2.0",
     "browserify": "^12.0.1",
     "tape": "^4.2.0",
