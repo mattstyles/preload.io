@@ -1,7 +1,8 @@
 import 'babel-polyfill'
 
 import Preloader from '../lib'
-const EVENTS = Preloader.EVENTS
+import { EVENTS } from '../lib'
+
 
 let wait = function( delay ) {
   return {

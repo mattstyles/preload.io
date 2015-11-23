@@ -20,14 +20,7 @@ export const EVENTS = {
  * @class
  */
 export default class Preloader extends EventEmitter {
-  static EVENTS = {
-    LOAD: 'load',
-    LOAD_ERROR: 'load:error',
-
-    START: 'preload:start',
-    COMPLETE: 'preload:complete',
-    FLUSH: 'preload:flush'
-  }
+  static EVENTS = EVENTS
 
   /**
    * @constructs
