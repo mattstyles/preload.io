@@ -1,3 +1,8 @@
+# 1.3.0
+
+* _add_ babel6 build
+* _add_ export events as static class member
+
 # 1.2.0
 
 * _add_ resource instead of url end point
