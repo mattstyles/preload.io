@@ -33,7 +33,7 @@ export default class Preloader extends EventEmitter {
     this.responses = new Map()
 
     // Per load event options
-    this.options = opts
+    this.options = opts || {}
 
     this.isRunning = false
   }
@@ -76,7 +76,10 @@ export default class Preloader extends EventEmitter {
         throw new Error( 'load requires an end point' )
       }
 
-      opts = Object.assign( opts, resource )
+      let eventOptions = Object.assign( opts.options, resource.options || {} )
+      opts = Object.assign( opts, resource, {
+        options: eventOptions
+      })
     }
 
     let id = opts.id || uuid.v1()

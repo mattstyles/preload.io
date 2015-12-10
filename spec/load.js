@@ -136,3 +136,30 @@ tape( 'Options passed to preloader are passed down to loaders', t => {
     loader: 'mock'
   })
 })
+
+tape( 'Options passed as load options take precedence', t => {
+  t.plan( 1 )
+
+  class Mock {
+    constructor() {
+      this.name = 'mock'
+    }
+    load = async ( ctx, opts ) => {
+      t.equal( opts.options.foo, 'bar', 'Options have been passed through to the loader' )
+    }
+  }
+
+  let mockLoader = new Mock()
+  let preloader = new Preloader({
+    foo: 'foo'
+  })
+  preloader.register( mockLoader )
+
+  preloader.load({
+    resource: 'mock',
+    loader: 'mock',
+    options: {
+      foo: 'bar'
+    }
+  })
+})
