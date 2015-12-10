@@ -1,4 +1,4 @@
-#
+# 1.4.0
 
 * _add_ pass options from preloader to load events
 
