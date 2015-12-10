@@ -112,3 +112,27 @@ tape( 'Multiple load events should all be triggered on the next tick to allow th
     t.equal( responses.size, 5 )
   })
 })
+
+tape( 'Options passed to preloader are passed down to loaders', t => {
+  t.plan( 1 )
+
+  class Mock {
+    constructor() {
+      this.name = 'mock'
+    }
+    load = async ( ctx, opts ) => {
+      t.ok( opts.options.foo, 'Options have been passed through to the loader' )
+    }
+  }
+
+  let mockLoader = new Mock()
+  let preloader = new Preloader({
+    foo: 'foo'
+  })
+  preloader.register( mockLoader )
+
+  preloader.load({
+    resource: 'mock',
+    loader: 'mock'
+  })
+})

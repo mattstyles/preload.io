@@ -20,7 +20,7 @@
     ]
   },
   "author": "Matt Styles",
-  "repository": "git://github.com/mattstyles/preloadio.git",
+  "repository": "git://github.com/mattstyles/preload.io.git",
   "license": "ISC",
   "dependencies": {
     "eventemitter3": "^1.1.1",
