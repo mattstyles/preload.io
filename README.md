@@ -114,7 +114,20 @@ Preloader will pass any options through to individual loaders, you can think of 
 const preloader = new Preloader({
   mode: 'no-cors'
 })
+
+// assert( options.mode === 'no-cors' )
 ```
+
+```js
+const preloader = new Preloader()
+preloader.load({
+  resource: 'image.jpg',
+  options: {
+    mode: 'cors'
+  }
+})
+
+// assert( options.mode === 'cors' )
 
 ## Contributions
 
