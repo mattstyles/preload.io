@@ -1,3 +1,7 @@
+# 1.4.1
+
+* _update_ option precedence
+
 # 1.4.0
 
 * _add_ pass options from preloader to load events
