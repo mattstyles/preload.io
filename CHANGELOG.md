@@ -1,3 +1,7 @@
+# 1.4.2
+
+* _fix_ stop mutating, use clean object
+
 # 1.4.1
 
 * _update_ option precedence
