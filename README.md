@@ -35,11 +35,11 @@ import { EVENTS } from 'preload.io'
 preloader.load( 'image.jpg' )
 
 preloader.on( EVENTS.LOAD, event => {
-    // Stuff from each load event ends up here
+  // Stuff from each load event ends up here
 })
 
 preloader.on( EVENTS.COMPLETE, res => {
-    // All the responses from load events end up here
+  // All the responses from load events end up here
 })
 ```
 
@@ -49,8 +49,8 @@ preloader.on( EVENTS.COMPLETE, res => {
 
 ```js
 preloader.load({
-    resource: 'image.png',
-    wait: true
+  resource: 'image.png',
+  wait: true
 })
 
 // Some time later you’ll need to manually run the preload queue
@@ -70,8 +70,8 @@ const imageloader = new ImageLoader()
 preloader.register( imageloader )
 
 preloader.load({
-    resource: '/dailyImage',
-    loader: imageloader.name
+  resource: '/dailyImage',
+  loader: imageloader.name
 })
 ```
 
@@ -83,9 +83,9 @@ Sometimes you’ll want to set up a queue of load events but respond to a specif
 const id = preloader.load( 'splash-image.jpg' )
 
 preloader.on( EVENTS.LOAD, event => {
-    if ( event.id === id ) {
-        goUseThatSplashImage( event.res )
-    }
+  if ( event.id === id ) {
+    goUseThatSplashImage( event.res )
+  }
 })
 ```
 
@@ -97,12 +97,22 @@ A handle to all the resources is returned as a map during the `complete` event. 
 
 ```js
 preloader.load({
-    id: 'splash',
-    resource: 'splash-image.jpg'
+  id: 'splash',
+  resource: 'splash-image.jpg'
 })
 
 preloader.on( EVENTS.COMPLETE, resources => {
-    doSomeSplashing( resources.get( 'splash' ).res )
+  doSomeSplashing( resources.get( 'splash' ).res )
+})
+```
+
+## Passing options through preloader to the individual loaders
+
+Preloader will pass any options through to individual loaders, you can think of these as default or global options. Options passed to individual loaders will have higher precedence.
+
+```js
+const preloader = new Preloader({
+  mode: 'no-cors'
 })
 ```
 

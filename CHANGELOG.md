@@ -1,3 +1,7 @@
+#
+
+* _add_ pass options from preloader to load events
+
 # 1.3.0
 
 * _add_ babel6 build
