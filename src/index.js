@@ -67,16 +67,17 @@ export default class Preloader extends EventEmitter {
       resource: resource,
       wait: false,
       loader: null,
-      id: null,
-      options: this.options
+      id: null
     }
+
+    opts.options = this.options
 
     if ( typeof resource === 'object' ) {
       if ( !resource.resource ) {
         throw new Error( 'load requires an end point' )
       }
 
-      let eventOptions = Object.assign( opts.options, resource.options || {} )
+      let eventOptions = Object.assign( {}, opts.options, resource.options || {} )
       opts = Object.assign( opts, resource, {
         options: eventOptions
       })
